@@ -27,12 +27,12 @@ jobs:
       - uses: mattjmorrison-homelab/actions-openbao@a9a15ee54f4b6a08b17ddd55df99d5109cfb5748 # main
         with:
           role: admin-cloudflare
-          kv-path: homelab/k8s-cloudflare/cloudflare-api-token
+          kv-path: homelab/admin-cloudflare/cloudflare-api-token
           output-name: CLOUDFLARE_API_TOKEN
       - uses: mattjmorrison-homelab/actions-openbao@a9a15ee54f4b6a08b17ddd55df99d5109cfb5748 # main
         with:
           role: admin-cloudflare
-          kv-path: homelab/k8s-cloudflare/cf-account-id
+          kv-path: homelab/admin-cloudflare/cf-account-id
           output-name: TF_VAR_cf_account_id
       - run: tofu init
       - run: tofu plan -out=tfplan
@@ -51,12 +51,12 @@ jobs:
       - uses: mattjmorrison-homelab/actions-openbao@a9a15ee54f4b6a08b17ddd55df99d5109cfb5748 # main
         with:
           role: admin-cloudflare
-          kv-path: homelab/k8s-cloudflare/cloudflare-api-token
+          kv-path: homelab/admin-cloudflare/cloudflare-api-token
           output-name: CLOUDFLARE_API_TOKEN
       - uses: mattjmorrison-homelab/actions-openbao@a9a15ee54f4b6a08b17ddd55df99d5109cfb5748 # main
         with:
           role: admin-cloudflare
-          kv-path: homelab/k8s-cloudflare/cf-account-id
+          kv-path: homelab/admin-cloudflare/cf-account-id
           output-name: TF_VAR_cf_account_id
       - uses: mattjmorrison-homelab/actions-tofu/download-plan@c4253df5832781cf10d3b5dda78c135e6eed2a6b
         with:
