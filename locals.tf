@@ -15,16 +15,5 @@ locals {
       hostname = "argocd.morrisons.site"
       consumer = "k8s-cloudflare's tunnel ingress -> argocd-server.argocd.svc.cluster.local"
     }
-    # Woodpecker is fully decommissioned (no namespace/service/ingress left
-    # anywhere in the cluster, k8s-cloudflare#5 already dropped its tunnel
-    # ingress route and stopped recreating this record) -- this entry only
-    # exists to adopt the real, still-live, orphaned record into state so
-    # a follow-up PR can remove it declaratively (`apply` then deletes it
-    # for real), instead of it lingering unmanaged forever. Not a hostname
-    # anything should ever route to again.
-    woodpecker = {
-      hostname = "woodpecker.morrisons.site"
-      consumer = "none -- being retired, see k8s-cloudflare#5"
-    }
   }
 }
