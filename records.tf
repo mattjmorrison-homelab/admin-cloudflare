@@ -26,3 +26,14 @@ import {
   to = cloudflare_dns_record.records["argocd"]
   id = "${data.cloudflare_zone.morrisons_site.id}/${data.cloudflare_dns_records.argocd_existing.result[0].id}"
 }
+
+# Adopts the orphaned woodpecker.morrisons.site record so it's under real
+# management -- a follow-up PR removes this dns_records entry entirely,
+# which makes `apply` delete the real record instead of leaving it to
+# linger unmanaged. Not importing-and-destroying in one step: an import
+# block requires its target resource to still be declared in config for
+# that same plan, so adopt-then-remove has to be two separate PRs.
+import {
+  to = cloudflare_dns_record.records["woodpecker"]
+  id = "${data.cloudflare_zone.morrisons_site.id}/${data.cloudflare_dns_records.woodpecker_existing.result[0].id}"
+}
