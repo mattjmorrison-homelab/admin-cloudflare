@@ -25,3 +25,13 @@ data "cloudflare_dns_records" "argocd_existing" {
     exact = local.dns_records.argocd.hostname
   }
 }
+
+# Same idea, for the orphaned woodpecker record -- see locals.tf's comment
+# on why this entry exists at all.
+data "cloudflare_dns_records" "woodpecker_existing" {
+  zone_id = data.cloudflare_zone.morrisons_site.id
+  type    = "CNAME"
+  name = {
+    exact = local.dns_records.woodpecker.hostname
+  }
+}
