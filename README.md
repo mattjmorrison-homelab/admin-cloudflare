@@ -47,8 +47,15 @@ pre-existing record does, since only that state gap exists.
 ## CI credentials
 
 CI reads `cloudflare-api-token` and `cf-account-id` from OpenBao at
-`kv/homelab/k8s-cloudflare/*` -- the same two real values
-`k8s-cloudflare`'s own in-cluster `cloudflare-bootstrap` role already
-reads. No new secret was scaffolded for this repo; `admin-openbao`'s
-`admin-cloudflare` role is a second, narrower grant over those same two
-existing keys, read-only.
+`kv/homelab/admin-cloudflare/*` -- this repo's own dedicated credential,
+separate from `k8s-cloudflare`'s in-cluster `cloudflare-bootstrap` token.
+Two different consumers must never share one credential, even when both
+happen to authenticate against the same Cloudflare account -- that's the
+sharing this homelab's secrets standard exists to prevent.
+
+The real token needs a narrower scope than `k8s-cloudflare`'s: `Zone:Read`,
+`DNS:Edit`, `Account:Cloudflare Tunnel:Read` (read-only -- this repo only
+looks up the tunnel, never creates or edits it), restricted to the
+`morrisons.site` zone. Create it in Cloudflare's dashboard and paste it
+into the scaffolded `kv/homelab/admin-cloudflare/cloudflare-api-token`
+path, same as every other real credential in this homelab.
