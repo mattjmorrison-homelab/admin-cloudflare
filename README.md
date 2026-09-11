@@ -44,6 +44,22 @@ pre-existing record does, since only that state gap exists.
    in-cluster -- this repo only manages the public DNS side, not the
    tunnel's internal routing.
 
+## Securing argocd.morrisons.site
+
+`waf.tf` adds a Cloudflare WAF custom rule blocking any request to the
+GitHub webhook path (`argocd.morrisons.site/api/webhook`) whose source
+IP isn't in GitHub's own published webhook-delivery ranges
+(`https://api.github.com/meta`'s `hooks` field). This is defense-in-depth
+on top of ArgoCD's own `webhook.github.secret` HMAC signature check
+(already real and active) -- the signature check answers "is this
+payload really from GitHub", this rule answers "don't let non-GitHub
+traffic reach the path at all". GitHub's ranges are a static, manually
+checked list here, not auto-refreshed -- re-check periodically.
+
+Everything else on that hostname (and any future protected hostname) is
+gated by Cloudflare Access instead -- see the personal-access section
+below.
+
 ## CI credentials
 
 CI reads `cloudflare-api-token` and `cf-account-id` from OpenBao at
@@ -53,9 +69,11 @@ Two different consumers must never share one credential, even when both
 happen to authenticate against the same Cloudflare account -- that's the
 sharing this homelab's secrets standard exists to prevent.
 
-The real token needs a narrower scope than `k8s-cloudflare`'s: `Zone:Read`,
-`DNS:Edit`, `Account:Cloudflare Tunnel:Read` (read-only -- this repo only
-looks up the tunnel, never creates or edits it), restricted to the
-`morrisons.site` zone. Create it in Cloudflare's dashboard and paste it
-into the scaffolded `kv/homelab/admin-cloudflare/cloudflare-api-token`
+The token needs: `Zone:Read`, `DNS:Edit`, `Account:Cloudflare Tunnel:Read`
+(read-only -- this repo only looks up the tunnel, never creates or edits
+it), plus `Zone:Web Application Firewall:Edit` (for `waf.tf`) and
+`Account:Access: Apps and Policies:Edit` (for the personal-access Access
+Applications/Policies), all restricted to the `morrisons.site`
+zone/account. Create/edit it in Cloudflare's dashboard and paste the
+value into the scaffolded `kv/homelab/admin-cloudflare/cloudflare-api-token`
 path, same as every other real credential in this homelab.
