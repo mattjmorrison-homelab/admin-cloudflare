@@ -71,7 +71,10 @@ sharing this homelab's secrets standard exists to prevent.
 
 The token needs: `Zone:Read`, `DNS:Edit`, `Account:Cloudflare Tunnel:Read`
 (read-only -- this repo only looks up the tunnel, never creates or edits
-it), plus `Zone:Web Application Firewall:Edit` (for `waf.tf`) and
+it), plus `Zone:WAF:Edit` (for `waf.tf` -- confirmed the correct
+permission for the Rulesets engine `cloudflare_ruleset` uses; `Zone:
+Firewall Services` is a different, older permission tied to the legacy
+Firewall Rules API and isn't sufficient on its own) and
 `Account:Access: Apps and Policies:Edit` (for the personal-access Access
 Applications/Policies), all restricted to the `morrisons.site`
 zone/account. Create/edit it in Cloudflare's dashboard and paste the
