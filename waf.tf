@@ -25,7 +25,7 @@ resource "cloudflare_ruleset" "argocd_webhook_ip_allowlist" {
   zone_id     = data.cloudflare_zone.morrisons_site.id
   name        = "Restrict ArgoCD's GitHub webhook path to GitHub's published IPs"
   description = "Blocks any request to argocd.morrisons.site/api/webhook whose source IP isn't in GitHub's published webhook-delivery ranges."
-  kind        = "root"
+  kind        = "zone"
   phase       = "http_request_firewall_custom"
 
   rules = [
