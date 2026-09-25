@@ -8,11 +8,13 @@ terraform {
     }
   }
 
-  # State lives in k8s-garage's tofu-state bucket, same pattern as every
-  # other Terraform repo. Credentials come from AWS_ACCESS_KEY_ID/
-  # AWS_SECRET_ACCESS_KEY env vars, not from this file.
+  # State lives in this repo's own dedicated Garage bucket (Phase 1b,
+  # admin-openbao#39) -- migrated off the old shared tofu-state bucket,
+  # confirmed live via a zero-drift plan against the copied state.
+  # Credentials come from AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY env
+  # vars, not from this file.
   backend "s3" {
-    bucket = "tofu-state"
+    bucket = "admin-cloudflare-tofu-state"
     key    = "admin-cloudflare/terraform.tfstate"
     region = "garage"
 
